@@ -1,0 +1,6 @@
+---
+- name: install MySQL-python
+  yum: 
+    name: MySQL-python
+    state: installed
+ 

@@ -1,0 +1,76 @@
+---
+- name: install php latest
+  yum: name={{ item }} state=installed
+  with_items:
+    - php
+    - php-cli
+    - php-common
+    - php-process
+    - php-xml
+
+# - name: install php libs
+#   yum: name={{ item }} state=installed
+#   with_items:
+#     - php-jsonc
+
+- name: check exists php.ini
+  stat: 
+    path: /etc/php.ini
+  register: exists_phpini
+
+- name: set timezone in php.ini
+  lineinfile: 
+    dest: /etc/php.ini
+    regexp: '^;?date.timezone ='
+    line: 'date.timezone = Asia/Tokyo'
+  when: exists_phpini.stat.exists
+
+- name: hide X-Powered-By PHP in php.ini
+  lineinfile: 
+    dest: /etc/php.ini
+    regexp: '^;?expose_php ='
+    line: 'expose_php = Off'
+  when: exists_phpini.stat.exists
+
+- name: change upload_max_filesize
+  lineinfile: 
+    dest: /etc/php.ini
+    regexp: '^;?upload_max_filesize ='
+    line: 'upload_max_filesize = 128M'
+  when: exists_phpini.stat.exists
+
+- name: change post_max_size
+  lineinfile: 
+    dest: /etc/php.ini
+    regexp: '^;?post_max_size ='
+    line: 'post_max_size = 128M'
+  when: exists_phpini.stat.exists
+
+- name: install php-pgsql
+  yum: 
+    name: php-pgsql
+    state: installed
+
+- name: php mysqlをインストール
+  yum: 
+    name: php-mysqlnd
+    state: installed
+
+- name: install libs for phpMyAdmin
+  yum: name={{ item }} state=installed
+  with_items:
+    - libXpm
+    - libtool-ltdl
+    - php-bcmath
+    - php-gd
+    - php-mbstring
+    - php-pdo
+
+# - name: install libs for phpMyAdmin
+#   yum: name={{ item }} state=installed
+#   with_items:
+#     - libmcrypt
+#     - libtidy
+#     - php-mcrypt
+#     - php-tidy
+

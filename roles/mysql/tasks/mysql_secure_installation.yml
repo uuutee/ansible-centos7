@@ -1,0 +1,45 @@
+---
+- name: 初期設定確認 (mysqladmin ping で確認)
+  shell: "mysqladmin --defaults-file=/root/.my.cnf ping | grep alive"
+  ignore_errors: true
+  register: mysql_init_flag
+  check_mode: no
+
+- name: rootパスワードを変更する
+  mysql_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{ mysql.root_password }}"
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+  when: mysql_init_flag.rc == 0
+
+- name: anonymous userを削除
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql.root_password }}"
+    check_implicit_admin: yes
+    name: ""
+    host_all: yes
+    state: absent
+  when: mysql_init_flag.rc == 0
+
+- name: test databaseを削除
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql.root_password }}"
+    db: test
+    state: absent
+  when: mysql_init_flag.rc == 0
+
+- name: root ユーザ接続設定ファイル作成
+  template:
+    src: templates/.my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+  when: mysql_init_flag.rc == 0

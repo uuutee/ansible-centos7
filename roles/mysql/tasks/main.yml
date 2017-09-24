@@ -1,0 +1,6 @@
+---
+- name: install
+  include: install.yml
+- name: mysql_secure_installation
+  include: mysql_secure_installation.yml
+  when: mysql.use_secure_installation == true

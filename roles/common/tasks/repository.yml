@@ -1,0 +1,22 @@
+---
+- name: epel レポジトリを追加
+  yum: 
+    name: epel-release
+    state: installed
+
+- name: デフォルトでは epel を使用しないようにする
+  lineinfile:
+    dest: /etc/yum.repos.d/epel.repo
+    regexp: enabled=1
+    line: enabled=0
+
+- name: remi レポジトリを追加
+  yum: 
+    name: http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+    state: installed
+
+- name: デフォルトでは remi-safe を使用しないようにする
+  lineinfile:
+    dest: /etc/yum.repos.d/remi-safe.repo
+    regexp: enabled=1
+    line: enabled=0

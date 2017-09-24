@@ -1,0 +1,24 @@
+- name: php7.1 をインストールする
+  yum:
+    name: "{{ item }}"
+    state: latest
+    enablerepo: remi,remi-php71
+  with_items:
+    - php
+    - php-cli
+    - php-common
+
+- name: phpライブラリをインストール
+  yum:
+    name: "{{ item }}"
+    state: latest
+    enablerepo: remi,remi-php71
+  with_items:
+    - php-json
+    - php-process
+    - php-xml
+    - php-mbstring
+    - php-pdo
+    - php-mysqlnd
+    - php-pgsql
+    - php-gd

@@ -1,0 +1,37 @@
+---
+- name: install php-bcmath
+  yum:
+    name: php-bcmath
+    state: latest
+    enablerepo: remi,remi-php71
+
+- name: install mcrypt
+  yum:
+    name: libmcrypt
+    state: latest
+    enablerepo: epel
+
+- name: install php-mcrypt
+  yum:
+    name: php-mcrypt
+    state: latest
+    enablerepo: remi,remi-php71
+
+- name: install tidy
+  yum:
+    name: libtidy
+    state: latest
+    enablerepo: epel
+
+- name: install php-tidy
+  yum:
+    name: php-tidy
+    state: latest
+    enablerepo: remi,remi-php71
+
+# - name: install libs for phpMyAdmin
+#   yum: name={{ item }} state=installed
+#   with_items:
+#     - libXpm
+#     - libtool-ltdl
+

@@ -1,0 +1,24 @@
+---
+- name: postgres をインストール
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - postgresql
+    - postgresql-devel
+    - postgresql-server
+
+- stat: 
+    path: /var/lib/pgsql/data/PG_VERSION
+  register: dbcluster
+
+- name: postgres initdb
+  shell: initdb -D /var/lib/pgsql/data --no-locale --encoding=UTF8
+  become: yes
+  become_user: postgres
+  when: not dbcluster.stat.exists
+
+- name: start postgresql server
+  service: 
+    name: postgresql
+    state: started 

@@ -1,0 +1,16 @@
+---
+- name: ユーザを作成
+  user: 
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    groups: "{{ item.groups }}"
+    append: no
+    state: "{{ item.state }}"
+  with_items: "{{ usergroup.users }}"
+
+- name: authorized_keyを設定
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.authorized_key }}"
+  with_items: "{{ usergroup.users }}"
+

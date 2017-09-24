@@ -1,0 +1,5 @@
+.DS_Store
+hosts
+group_vars/
+*.retry
+/*.yml

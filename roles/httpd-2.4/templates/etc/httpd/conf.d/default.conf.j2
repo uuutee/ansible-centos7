@@ -1,0 +1,17 @@
+<VirtualHost *:80>
+	ServerName {{ip}}
+	DocumentRoot /var/www/html
+	<Directory "/var/www/html">
+		Options FollowSymLinks
+		AllowOverride All
+	</Directory>
+</VirtualHost>
+
+<VirtualHost *:80>
+	ServerName {{domain}}
+	DocumentRoot /var/www/html
+	<Directory "/var/www/html">
+		Options FollowSymLinks
+		AllowOverride All
+	</Directory>
+</VirtualHost>

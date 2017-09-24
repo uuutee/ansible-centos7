@@ -1,0 +1,9 @@
+---
+# OOMKiller 対策にswap領域を設定する
+- name: swap領域設定用に rc.local をコピー
+  template: 
+    src: templates/etc/rc.d/rc.local.j2
+    dest: /etc/rc.d/rc.local
+    owner: root 
+    group: root 
+    mode: 0755

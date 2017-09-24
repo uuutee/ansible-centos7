@@ -1,0 +1,47 @@
+---
+- name: httpdをインストール
+  yum: 
+    name: httpd
+    state: installed
+
+- name: ブート時にhttpdを起動する (chkconfig)
+  service: 
+    name: httpd
+    enabled: yes
+
+- name: httpdを起動する
+  service: 
+    name: httpd
+    state: started
+
+- name: httpd.conf 初期設定
+  template:
+    src: templates/etc/httpd/conf/httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: default VirtualHost設定
+  template:
+    src: templates/etc/httpd/conf.d/default.conf.j2
+    dest: /etc/httpd/conf.d/default.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: health check用htmlを設置
+  template:
+    src: templates/var/www/html/index.html
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: 0644
+
+- name: vhosts.d ディレクトリを作成
+  file: 
+    path: /etc/httpd/vhosts.d/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755

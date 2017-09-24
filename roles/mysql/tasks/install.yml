@@ -1,0 +1,25 @@
+---
+- name: MySQL 5.6をインストール
+  yum: name=mysql56-server state=installed
+
+- name: mysqldがインストールされているかを確認
+  stat: path=/etc/init.d/mysqld
+  register: mysqld_status
+
+- name: MySQLを起動する
+  service: name=mysqld state=started
+  when:
+    - mysqld_status.stat.exists == true
+    - mysql.use_localhost == true
+
+- name: boot時にMySQLを起動するように設定
+  service: name=mysqld enabled=yes
+  when:
+    - mysqld_status.stat.exists == true
+    - mysql.use_localhost == true
+
+- name: MySQL Serverを起動しないように設定
+  service: name=mysqld enabled=no state=stopped
+  when:
+    - mysqld_status.stat.exists == true
+    - mysql.use_localhost == false
